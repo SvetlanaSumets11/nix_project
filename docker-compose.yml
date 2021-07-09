@@ -1,0 +1,43 @@
+version: '3.3'
+
+services:
+  db:
+    image: postgres:13-alpine
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    container_name: hello_flask_dev
+    hostname: localhost:5432
+    environment:
+      - POSTGRES_USER=hello_flask
+      - POSTGRES_PASSWORD=hello_flask
+      - POSTGRES_DB=hello_flask_dev
+    ports:
+      - 5432:5432
+    networks:
+      - flask-net
+
+  web:
+    build:
+      context: ./services/web
+      dockerfile: Dockerfile
+    command: python manage.py run -h 0.0.0.0
+    volumes:
+      - ./services/web/:/usr/src/app/
+    env_file:
+      - ./.env
+    container_name: web
+    depends_on:
+      - db
+    ports:
+      - 5000:5000
+    restart: always
+    networks:
+      - flask-net
+
+volumes:
+  postgres_data:
+
+networks:
+  flask-net:
+    driver: bridge
