@@ -1,7 +1,7 @@
 """
 Film Database model.
 """
-from ..application import db
+from .. import db
 
 
 class Film(db.Model):

@@ -1,7 +1,7 @@
 """
 Director Database model.
 """
-from ..application import db
+from .. import db
 
 
 class Director(db.Model):

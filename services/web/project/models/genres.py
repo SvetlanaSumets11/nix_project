@@ -1,7 +1,7 @@
 """
 Genre Database model.
 """
-from ..application import db
+from .. import db
 
 
 class Genre(db.Model):
