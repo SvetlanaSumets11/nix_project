@@ -16,6 +16,6 @@ class Config:
     SQLALCHEMY_DATABASE_URI = (
         f"postgresql://"
         f"{POSTGRES_USER}:{POSTGRES_PASSWORD}"
-        f"@db-{APP_NAME}:5432/{POSTGRES_DB}"
+        f"@db{APP_NAME}:5432/{POSTGRES_DB}"
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = getenv("SQLALCHEMY_TRACK_MODIFICATIONS")
