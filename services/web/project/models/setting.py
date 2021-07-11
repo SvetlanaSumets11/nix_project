@@ -1,5 +1,5 @@
 from sqlalchemy import exc
-from ..application import db
+from .. import db
 
 
 class Setting:
