@@ -2,7 +2,7 @@
 Management file
 """
 from flask.cli import FlaskGroup
-from project.application import db, app
+from project import db, app
 
 
 cli = FlaskGroup(app)

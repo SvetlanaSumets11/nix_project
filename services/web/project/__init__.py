@@ -21,3 +21,5 @@ migrate = Migrate(app, db)
 
 # initialize api
 api = Api(app, title='Film library')
+
+from .models import directors, users, genres, films_directors, films_genres, films
