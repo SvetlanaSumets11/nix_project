@@ -5,6 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 
 from .. import db
+from sqlalchemy import exc
 
 
 class User(UserMixin, db.Model):
@@ -20,9 +21,9 @@ class User(UserMixin, db.Model):
     last_name = db.Column(db.String(50))
     email = db.Column(db.String(50), unique=True)
 
-    film_user = db.relationship('Film', backref='user', lazy='joined')
+    film_users = db.relationship('Film', backref='user_film', lazy=True)
 
-    def __init__(self, *args):
+    def __init__(self, user_login, user_password, is_admin, first_name, last_name, email):
         """
         Constructor
         :param user_login: users`s personal login name
@@ -32,8 +33,12 @@ class User(UserMixin, db.Model):
         :param last_name: users`s last name
         :param email: user`s mail for sending and receiving emails
         """
-        self.user_login, self.user_password, self.is_admin,\
-            self.first_name, self.last_name, self.email = args
+        self.user_login = user_login
+        self.user_password = user_password
+        self.is_admin = is_admin
+        self.first_name = first_name
+        self.last_name = last_name
+        self.email = email
 
     def check_password(self, password) -> bool:
         """
@@ -80,3 +85,21 @@ class User(UserMixin, db.Model):
                                          first_name=self.first_name,
                                          last_name=self.last_name,
                                          email=self.email)
+
+    @classmethod
+    def find_all(cls):
+        return cls.query.all()
+
+    def save_to_db(self):
+        try:
+            db.session.add(self)
+            db.session.commit()
+        except exc.IntegrityError:
+            db.session.rollback()
+
+    def delete_from_db(self):
+        try:
+            db.session.delete(self)
+            db.session.commit()
+        except exc.IntegrityError:
+            db.session.rollback()

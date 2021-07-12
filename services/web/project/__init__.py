@@ -6,8 +6,8 @@ from flask_sqlalchemy import SQLAlchemy
 
 from flask_migrate import Migrate
 from flask_restx import Api
-from . import config
 
+from . import config
 
 # create Flask application
 app = Flask(__name__)
@@ -21,3 +21,7 @@ migrate = Migrate(app, db)
 
 # initialize api
 api = Api(app, title='Film library')
+
+from .models import directors, users, genres, films_directors, films_genres, films
+from . import add_resources
+from .auth import login

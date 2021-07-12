@@ -6,14 +6,14 @@ services:
     restart: always
     volumes:
       - postgres_data:/var/lib/postgresql/data/
-    container_name: hello_flask_dev
-    hostname: localhost:5432
     environment:
-      - POSTGRES_USER=hello_flask
-      - POSTGRES_PASSWORD=hello_flask
-      - POSTGRES_DB=hello_flask_dev
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    container_name: db${APP_NAME}
+    hostname: db${APP_NAME}
     ports:
-      - 5432:5432
+      - ${DB_PORT}:5432
     networks:
       - flask-net
 
@@ -26,7 +26,8 @@ services:
       - ./services/web/:/usr/src/app/
     env_file:
       - ./.env
-    container_name: web
+    container_name: ${APP_NAME}
+    hostname: ${APP_NAME}
     depends_on:
       - db
     ports:
