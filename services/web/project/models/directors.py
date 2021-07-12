@@ -2,6 +2,7 @@
 Director Database model.
 """
 from .. import db
+from sqlalchemy import exc
 
 
 class Director(db.Model):
@@ -13,7 +14,7 @@ class Director(db.Model):
     dir_first_name = db.Column(db.String(50), nullable=False)
     dir_last_name = db.Column(db.String(50), nullable=False)
 
-    film_director = db.relationship('Director', backref='film_director', lazy='joined')
+    film_directors = db.relationship('FilmDirector', backref='director_film', lazy=True)
 
     def __init__(self, dir_first_name, dir_last_name):
         """
@@ -45,3 +46,21 @@ class Director(db.Model):
                'dir_last_name = {dir_last_name}>'.format(director_id=self.director_id,
                                                          dir_first_name=self.dir_first_name,
                                                          dir_last_name=self.dir_last_name)
+
+    @classmethod
+    def find_all(cls):
+        return cls.query.all()
+
+    def save_to_db(self):
+        try:
+            db.session.add(self)
+            db.session.commit()
+        except exc.IntegrityError:
+            db.session.rollback()
+
+    def delete_from_db(self):
+        try:
+            db.session.delete(self)
+            db.session.commit()
+        except exc.IntegrityError:
+            db.session.rollback()

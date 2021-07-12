@@ -2,6 +2,7 @@
 Film Database model.
 """
 from .. import db
+from sqlalchemy import exc
 
 
 class Film(db.Model):
@@ -17,10 +18,10 @@ class Film(db.Model):
     rating = db.Column(db.Integer)
     poster = db.Column(db.String(100))
 
-    film_director = db.relationship('FilmDirector', backref='film', lazy='joined')
-    film_genre = db.relationship('FilmGenre', backref='film', lazy='joined')
+    film_directors = db.relationship('FilmDirector', backref='film_director', lazy=True)
+    film_genres = db.relationship('FilmGenre', backref='film_genre', lazy=True)
 
-    def __init__(self, *args):
+    def __init__(self, user_id, film_name, release_date, description, rating, poster):
         """
         Constructor
         :param user_id: users`s id, where user is the person who added the movie
@@ -30,9 +31,12 @@ class Film(db.Model):
         :param rating: average movie rating
         :param poster: movie cover link
         """
-        self.user_id, self.film_name,\
-            self.release_date, self.description,\
-            self.rating, self.poster = args
+        self.user_id = user_id
+        self.film_name = film_name
+        self.release_date = release_date
+        self.description = description
+        self.rating = rating
+        self.poster = poster
 
     def to_dict(self) -> dict:
         """
@@ -62,3 +66,21 @@ class Film(db.Model):
                                            release_date=self.release_date,
                                            description=self.description,
                                            rating=self.rating, poster=self.poster)
+
+    @classmethod
+    def find_all(cls):
+        return cls.query.all()
+
+    def save_to_db(self):
+        try:
+            db.session.add(self)
+            db.session.commit()
+        except exc.IntegrityError:
+            db.session.rollback()
+
+    def delete_from_db(self):
+        try:
+            db.session.delete(self)
+            db.session.commit()
+        except exc.IntegrityError:
+            db.session.rollback()
