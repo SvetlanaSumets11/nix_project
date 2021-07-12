@@ -13,4 +13,4 @@ class UserSchema(SQLAlchemyAutoSchema):
         load_instance = True
         include_fk = True
 
-        fields = ("user_login", "user_password", "is_admin", "first_name", "last_name", "email",)
+        fields = ("user_login", "user_password", "first_name", "last_name", "email",)
