@@ -4,10 +4,10 @@ Module for main function pagination
 from flask import abort
 
 
-def get_paginated_list(data, route, start, limit, name=None) -> dict:
+def get_paginated_list(data, route, start, limit, arg=None) -> dict:
     """
     Main function pagination
-    :param name:
+    :param arg: query parameter
     :param data: entity data
     :param route: access link
     :param start: id of the recording from which the output starts
@@ -25,18 +25,18 @@ def get_paginated_list(data, route, start, limit, name=None) -> dict:
     if start == 1:
         info['previous'] = ''
     else:
-        if name:
+        if arg:
             info['previous'] = route + '?start=%d&limit=%d' \
                            % (max(1, start - limit), start - 1)
-        info['previous'] = route + '?start=%d&limit=%d&name=%s' \
-                           % (max(1, start - limit), start - 1, name)
+        info['previous'] = route + '?start=%d&limit=%d&%s' \
+                           % (max(1, start - limit), start - 1, arg)
 
     if start + limit > count:
         info['next'] = ''
     else:
-        if name:
+        if arg:
             info['next'] = route + '?start=%d&limit=%d' % (start + limit, limit)
-        info['next'] = route + '?start=%d&limit=%d&name=%s' % (start + limit, limit, name)
+        info['next'] = route + '?start=%d&limit=%d&%s' % (start + limit, limit, arg)
 
     info['data'] = data[(start - 1):(start - 1 + limit)]
     return info
