@@ -11,6 +11,7 @@ from . import config
 
 # create Flask application
 app = Flask(__name__)
+app.secret_key = 'super secret key'
 # Environment Configuration
 app.config.from_object(config.Config)
 
@@ -25,3 +26,4 @@ api = Api(app, title='Film library')
 from .models import directors, users, genres, films_directors, films_genres, films
 from . import add_resources
 from .auth import login
+from .pagination import pagination
