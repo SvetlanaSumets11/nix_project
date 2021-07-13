@@ -18,14 +18,36 @@ class FilmList(Resource):
     """Film Data Resource Class"""
 
     @classmethod
-    def get(cls, film_id=None):
+    def get(cls):
+        """
+        Get method
+        :return: error message or json with information about the film
+        """
+        return film_list_schema.dump(Film.find_all()), 200
+
+    @classmethod
+    def post(cls):
+        """
+        Post method
+        :return: json with information about the film
+        """
+        film_json = request.get_json()
+        film_data = film_schema.load(film_json, session=db.session)
+        film_data.save_to_db()
+
+        return film_schema.dump(film_data), 201
+
+
+class FilmListId(Resource):
+    """Film Data Resource Class"""
+
+    @classmethod
+    def get(cls, film_id):
         """
         Get method
         :param film_id: film`s id
         :return: error message or json with information about the film
         """
-        if not film_id:
-            return film_list_schema.dump(Film.find_all()), 200
         film_data = Film.query.get_or_404(film_id)
         if film_data:
             return film_schema.dump(film_data), 200
@@ -66,15 +88,3 @@ class FilmList(Resource):
 
         film_data.save_to_db()
         return film_schema.dump(film_data), 200
-
-    @classmethod
-    def post(cls):
-        """
-        Post method
-        :return: json with information about the film
-        """
-        film_json = request.get_json()
-        film_data = film_schema.load(film_json, session=db.session)
-        film_data.save_to_db()
-
-        return film_schema.dump(film_data), 201

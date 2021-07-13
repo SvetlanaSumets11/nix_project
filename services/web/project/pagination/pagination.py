@@ -3,10 +3,13 @@ Pagination module
 """
 from flask import request, jsonify
 from .. import app
+
 from ..resources.genres import GenreList
 from ..resources.directors import DirectorList
 from ..resources.films import FilmList
 from ..resources.users import UserList
+
+from ..models.films import Film
 
 from . import get_paginated_list
 
@@ -19,8 +22,8 @@ def get_pagination_genres():
     :return: JSON
     """
     return jsonify(get_paginated_list(
-        GenreList.get()[0],
-        '/genre',
+        data=GenreList.get()[0],
+        route='/genre',
         start=request.args.get('start', 1),
         limit=request.args.get('limit', 10)))
 
@@ -33,8 +36,8 @@ def get_pagination_films():
     :return: JSON
     """
     return jsonify(get_paginated_list(
-        FilmList.get()[0],
-        '/film',
+        data=FilmList.get()[0],
+        route='/film',
         start=request.args.get('start', 1),
         limit=request.args.get('limit', 10)))
 
@@ -47,8 +50,8 @@ def get_pagination_users():
     :return: JSON
     """
     return jsonify(get_paginated_list(
-        UserList.get()[0],
-        '/user',
+        data=UserList.get()[0],
+        route='/user',
         start=request.args.get('start', 1),
         limit=request.args.get('limit', 10)))
 
@@ -61,7 +64,33 @@ def get_pagination_directors():
     :return: JSON
     """
     return jsonify(get_paginated_list(
-        DirectorList.get()[0],
-        '/director',
+        data=DirectorList.get()[0],
+        route='/director',
         start=request.args.get('start', 1),
         limit=request.args.get('limit', 10)))
+
+
+@app.route('/film/find', methods=['GET'])
+def get_pagination_films_find():
+    films_find = request.args.get('name')
+
+    search = '%' + films_find + '%'
+    films = Film.query.filter(Film.film_name.like(search)).all()
+
+    if not films:
+        return {"status": 401, "reason": "Film does not exist"}
+
+    film_list = [{
+        'film_name': film.film_name,
+        'release_date': film.release_date,
+        'description': film.description,
+        'rating': film.rating,
+        'poster': film.poster
+    } for film in films]
+
+    return jsonify(get_paginated_list(
+        data=film_list,
+        route='/film/find',
+        start=request.args.get('start', 1),
+        limit=request.args.get('limit', 10),
+        name=films_find))

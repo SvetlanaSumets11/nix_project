@@ -17,14 +17,36 @@ class DirectorList(Resource):
     """Director Data Resource Class"""
 
     @classmethod
-    def get(cls, director_id=None):
+    def get(cls):
+        """
+        Get method
+        :return: error message or json with information about the directors
+        """
+        return director_list_schema.dump(Director.find_all()), 200
+
+    @classmethod
+    def post(cls):
+        """
+        Post method
+        :return: json with information about the directors
+        """
+        director_json = request.get_json()
+        director_data = director_schema.load(director_json, session=db.session)
+        director_data.save_to_db()
+
+        return director_schema.dump(director_data), 201
+
+
+class DirectorListId(Resource):
+    """Director Data Resource Class"""
+
+    @classmethod
+    def get(cls, director_id):
         """
         Get method
         :param director_id: director`s id
         :return: error message or json with information about the directors
         """
-        if not director_id:
-            return director_list_schema.dump(Director.find_all()), 200
         director_data = Director.query.get_or_404(director_id)
         if director_data:
             return director_schema.dump(director_data), 200
@@ -61,15 +83,3 @@ class DirectorList(Resource):
 
         director_data.save_to_db()
         return director_schema.dump(director_data), 200
-
-    @classmethod
-    def post(cls):
-        """
-        Post method
-        :return: json with information about the directors
-        """
-        director_json = request.get_json()
-        director_data = director_schema.load(director_json, session=db.session)
-        director_data.save_to_db()
-
-        return director_schema.dump(director_data), 201

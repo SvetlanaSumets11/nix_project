@@ -16,15 +16,37 @@ user_list_schema = UserSchema(many=True)
 
 class UserList(Resource):
     """User Data Resource Class"""
+
     @classmethod
-    def get(cls, user_id=None):
+    def get(cls):
+        """
+        Get method
+        :return: error message or json with information about the user
+        """
+        return user_list_schema.dump(User.find_all()), 200
+
+    @classmethod
+    def post(cls):
+        """
+        Post method
+        :return: json with information about the user
+        """
+        user_json = request.get_json()
+        user_data = user_schema.load(user_json, session=db.session)
+        user_data.save_to_db()
+
+        return user_schema.dump(user_data), 201
+
+
+class UserListId(Resource):
+    """User Data Resource Class"""
+    @classmethod
+    def get(cls, user_id):
         """
         Get method
         :param user_id: user`s id
         :return: error message or json with information about the user
         """
-        if not user_id:
-            return user_list_schema.dump(User.find_all()), 200
         user_data = User.query.get_or_404(user_id)
         if user_data:
             return user_schema.dump(user_data), 200
@@ -64,15 +86,3 @@ class UserList(Resource):
 
         user_data.save_to_db()
         return user_schema.dump(user_data), 200
-
-    @classmethod
-    def post(cls):
-        """
-        Post method
-        :return: json with information about the user
-        """
-        user_json = request.get_json()
-        user_data = user_schema.load(user_json, session=db.session)
-        user_data.save_to_db()
-
-        return user_schema.dump(user_data), 201
