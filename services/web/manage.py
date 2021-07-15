@@ -18,5 +18,14 @@ def create_db() -> None:
     db.session.commit()
 
 
+@cli.command("drop_db")
+def drop_db() -> None:
+    """
+    Database delete function
+    """
+    db.drop_all()
+    db.session.commit()
+
+
 if __name__ == "__main__":
     cli()
