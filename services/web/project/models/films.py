@@ -1,8 +1,8 @@
 """
 Film Database model.
 """
-from .. import db
 from sqlalchemy import exc
+from .. import db
 
 
 class Film(db.Model):
@@ -15,11 +15,11 @@ class Film(db.Model):
     film_name = db.Column(db.String(50), nullable=False)
     release_date = db.Column(db.Date)
     description = db.Column(db.Text)
-    rating = db.Column(db.Integer)
+    rating = db.Column(db.Float)
     poster = db.Column(db.String(100))
 
-    film_directors = db.relationship('FilmDirector', backref='film_director', lazy=True)
-    film_genres = db.relationship('FilmGenre', backref='film_genre', lazy=True)
+    film_directors = db.relationship('Director', secondary='film_director')
+    film_genres = db.relationship("Genre", secondary='film_genre')
 
     def __init__(self, user_id, film_name, release_date, description, rating, poster):
         """
@@ -68,17 +68,29 @@ class Film(db.Model):
                                            rating=self.rating, poster=self.poster)
 
     @classmethod
-    def find_all(cls):
+    def find_all(cls) -> object:
+        """
+        Function to find all records of an entity Film
+        :return: film class object
+        """
         return cls.query.all()
 
-    def save_to_db(self):
+    def save_to_db(self) -> None:
+        """
+        Function to save a record in the database
+        :return: None
+        """
         try:
             db.session.add(self)
             db.session.commit()
         except exc.IntegrityError:
             db.session.rollback()
 
-    def delete_from_db(self):
+    def delete_from_db(self) -> None:
+        """
+        Function to delete a record in the database
+        :return: None
+        """
         try:
             db.session.delete(self)
             db.session.commit()

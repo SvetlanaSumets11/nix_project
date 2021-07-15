@@ -1,8 +1,8 @@
 """
 Genre Database model.
 """
-from .. import db
 from sqlalchemy import exc
+from .. import db
 
 
 class Genre(db.Model):
@@ -12,8 +12,6 @@ class Genre(db.Model):
     __tablename__ = 'genre'
     genre_id = db.Column(db.Integer, primary_key=True)
     genre_name = db.Column(db.String(50), nullable=False)
-
-    film_genres = db.relationship('FilmGenre', backref='genre_film', lazy=True)
 
     def __init__(self, genre_name):
         """
@@ -42,17 +40,29 @@ class Genre(db.Model):
                                                    genre_name=self.genre_name)
 
     @classmethod
-    def find_all(cls):
+    def find_all(cls) -> object:
+        """
+        Function to find all records of an entity Genre
+        :return: genre class object
+        """
         return cls.query.all()
 
-    def save_to_db(self):
+    def save_to_db(self) -> None:
+        """
+        Function to save a record in the database
+        :return: None
+        """
         try:
             db.session.add(self)
             db.session.commit()
         except exc.IntegrityError:
             db.session.rollback()
 
-    def delete_from_db(self):
+    def delete_from_db(self) -> None:
+        """
+        Function to delete a record in the database
+        :return: None
+        """
         try:
             db.session.delete(self)
             db.session.commit()

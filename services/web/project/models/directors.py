@@ -1,8 +1,8 @@
 """
 Director Database model.
 """
-from .. import db
 from sqlalchemy import exc
+from .. import db
 
 
 class Director(db.Model):
@@ -13,8 +13,6 @@ class Director(db.Model):
     director_id = db.Column(db.Integer, primary_key=True)
     dir_first_name = db.Column(db.String(50), nullable=False)
     dir_last_name = db.Column(db.String(50), nullable=False)
-
-    film_directors = db.relationship('FilmDirector', backref='director_film', lazy=True)
 
     def __init__(self, dir_first_name, dir_last_name):
         """
@@ -48,17 +46,29 @@ class Director(db.Model):
                                                          dir_last_name=self.dir_last_name)
 
     @classmethod
-    def find_all(cls):
+    def find_all(cls) -> object:
+        """
+        Function to find all records of an entity Director
+        :return: director class object
+        """
         return cls.query.all()
 
-    def save_to_db(self):
+    def save_to_db(self) -> None:
+        """
+        Function to save a record in the database
+        :return: None
+        """
         try:
             db.session.add(self)
             db.session.commit()
         except exc.IntegrityError:
             db.session.rollback()
 
-    def delete_from_db(self):
+    def delete_from_db(self) -> None:
+        """
+        Function to delete a record in the database
+        :return: None
+        """
         try:
             db.session.delete(self)
             db.session.commit()

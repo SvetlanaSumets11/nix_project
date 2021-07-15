@@ -4,8 +4,9 @@ User Database model.
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 
-from .. import db
 from sqlalchemy import exc
+
+from .. import db
 
 
 class User(UserMixin, db.Model):
@@ -28,7 +29,6 @@ class User(UserMixin, db.Model):
         Constructor
         :param user_login: users`s personal login name
         :param user_password: user`s secret conditional character set
-        :param is_admin: flag whether the user is an admin
         :param first_name: users`s first name
         :param last_name: users`s last name
         :param email: user`s mail for sending and receiving emails
@@ -48,8 +48,19 @@ class User(UserMixin, db.Model):
         """
         return check_password_hash(self.user_password, password)
 
-    def get_id(self):
+    def get_id(self) -> int:
+        """
+        Get user`s id
+        :return: user`s id
+        """
         return self.user_id
+
+    def set_admin(self) -> None:
+        """
+        Set flag is_admin for user
+        :return: None
+        """
+        self.is_admin = True
 
     def to_dict(self) -> dict:
         """
@@ -83,17 +94,29 @@ class User(UserMixin, db.Model):
                                          email=self.email)
 
     @classmethod
-    def find_all(cls):
+    def find_all(cls) -> object:
+        """
+        Function to find all records of an entity User
+        :return: user class object
+        """
         return cls.query.all()
 
-    def save_to_db(self):
+    def save_to_db(self) -> None:
+        """
+        Function to save a record in the database
+        :return: None
+        """
         try:
             db.session.add(self)
             db.session.commit()
         except exc.IntegrityError:
             db.session.rollback()
 
-    def delete_from_db(self):
+    def delete_from_db(self) -> None:
+        """
+        Function to delete a record in the database
+        :return: None
+        """
         try:
             db.session.delete(self)
             db.session.commit()

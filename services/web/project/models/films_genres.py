@@ -1,6 +1,7 @@
 """
 FilmGenre Database model.
 """
+from sqlalchemy import exc
 from .. import db
 
 
@@ -43,3 +44,33 @@ class FilmGenre(db.Model):
             .format(film_genre_id=self.film_genre_id,
                     film_id=self.film_id,
                     genre_id=self.genre_id)
+
+    @classmethod
+    def find_all(cls) -> object:
+        """
+        Function to find all records of an entity FilmGenre
+        :return: film-genre class object
+        """
+        return cls.query.all()
+
+    def save_to_db(self) -> None:
+        """
+        Function to save a record in the database
+        :return: None
+        """
+        try:
+            db.session.add(self)
+            db.session.commit()
+        except exc.IntegrityError:
+            db.session.rollback()
+
+    def delete_from_db(self) -> None:
+        """
+        Function to delete a record in the database
+        :return: None
+        """
+        try:
+            db.session.delete(self)
+            db.session.commit()
+        except exc.IntegrityError:
+            db.session.rollback()
