@@ -25,5 +25,3 @@ api = Api(app, title='Film library')
 
 from .models import directors, users, genres, films_directors, films_genres, films
 from . import add_resources
-from .auth import login
-from .pagination import pagination

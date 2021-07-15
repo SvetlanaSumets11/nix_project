@@ -3,6 +3,7 @@ Director entity resources
 """
 from flask import request
 from flask_restx import Resource
+from flask_login import login_required, current_user
 
 from ..modelschemas.genres import GenreSchema
 from ..models.genres import Genre
@@ -17,7 +18,7 @@ class GenreList(Resource):
     """Genre Data Resource Class"""
 
     @classmethod
-    def get(cls):
+    def get(cls) -> (dict, int):
         """
         Get method
         :return: error message or json with information about the genre
@@ -25,22 +26,26 @@ class GenreList(Resource):
         return genre_list_schema.dump(Genre.find_all()), 200
 
     @classmethod
-    def post(cls):
+    @login_required
+    def post(cls) -> (dict, int):
         """
         Post method
         :return: json with information about the genre
         """
-        genre_json = request.get_json()
-        genre_data = genre_schema.load(genre_json, session=db.session)
-        genre_data.save_to_db()
+        if current_user.is_authenticated and current_user.is_admin:
+            genre_json = request.get_json()
+            genre_data = genre_schema.load(genre_json, session=db.session)
+            genre_data.save_to_db()
 
-        return genre_schema.dump(genre_data), 201
+            return genre_schema.dump(genre_data), 201
+        return {"status": 401, "reason": "User is not admin"}
 
 
 class GenreListId(Resource):
     """Genre Data Resource Class"""
+
     @classmethod
-    def get(cls, genre_id):
+    def get(cls, genre_id) -> (dict, int):
         """
         Get method
         :param genre_id: genre`s id
@@ -49,35 +54,41 @@ class GenreListId(Resource):
         genre_data = Genre.query.get_or_404(genre_id)
         if genre_data:
             return genre_schema.dump(genre_data), 200
-        return {'message': GENRE_NOT_FOUND}, 404
+        return {"status": 404, 'message': GENRE_NOT_FOUND}
 
     @classmethod
-    def delete(cls, genre_id):
+    @login_required
+    def delete(cls, genre_id) -> dict:
         """
         Delete method
         :param genre_id: genre`s id
         :return: error message or successful message
         """
-        genre_data = Genre.query.get_or_404(genre_id)
-        if genre_data:
-            genre_data.delete_from_db()
-            return {'message': "Genre Deleted successfully"}, 200
-        return {'message': GENRE_NOT_FOUND}, 404
+        if current_user.is_authenticated and current_user.is_admin:
+            genre_data = Genre.query.get_or_404(genre_id)
+            if genre_data:
+                genre_data.delete_from_db()
+                return {"status": 200, 'message': "Genre Deleted successfully"}
+            return {"status": 404, 'message': GENRE_NOT_FOUND}
+        return {"status": 401, "reason": "User is not admin"}
 
     @classmethod
-    def put(cls, genre_id):
+    @login_required
+    def put(cls, genre_id) -> (dict, int):
         """
         Put method
         :param genre_id: genre`s id
         :return: json with information about the genre
         """
-        genre_data = Genre.query.get_or_404(genre_id)
-        genre_json = request.get_json()
+        if current_user.is_authenticated and current_user.is_admin:
+            genre_data = Genre.query.get_or_404(genre_id)
+            genre_json = request.get_json()
 
-        if genre_data:
-            genre_data.genre_name = genre_json['genre_name']
-        else:
-            genre_data = genre_schema.load(genre_json, session=db.session)
+            if genre_data:
+                genre_data.genre_name = genre_json['genre_name']
+            else:
+                genre_data = genre_schema.load(genre_json, session=db.session)
 
-        genre_data.save_to_db()
-        return genre_schema.dump(genre_data), 200
+            genre_data.save_to_db()
+            return genre_schema.dump(genre_data), 200
+        return {"status": 401, "reason": "User is not admin"}
