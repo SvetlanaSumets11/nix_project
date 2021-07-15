@@ -18,6 +18,9 @@ from .operation_film.user_add_film import AddFilm
 
 from .auth.login import Login, Logout, SignUp
 
+from .operation_film.pretty_print import Print
+
+
 # standard resources (all record) without pagination
 api.add_resource(FilmList, "/films")
 api.add_resource(UserList, "/users")
@@ -30,7 +33,7 @@ api.add_resource(UserListId, "/users/<int:user_id>")
 api.add_resource(GenreListId, "/genres/<int:genre_id>")
 api.add_resource(DirectorListId, "/directors/<int:director_id>")
 
-# standard resources (all record) with pagination
+# get method (all record) with pagination - get
 api.add_resource(PaginationFilm, "/film")
 api.add_resource(PaginationUser, "/user")
 api.add_resource(PaginationGenre, "/genre")
@@ -54,3 +57,6 @@ api.add_resource(DirectorFilter, "/film/filter/director/<name_or_surname>")
 
 # operation with films(add) - post
 api.add_resource(AddFilm, "/film/add")
+
+# pretty print information about film (info about film, user, genre, director)
+api.add_resource(Print, "/film/info/<int:film_id>")

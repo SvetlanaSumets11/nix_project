@@ -44,8 +44,6 @@ class Film(db.Model):
         :return: film
         """
         return {
-            'film_id': self.film_id,
-            'user_id': self.user_id,
             'film_name': self.film_name,
             'release_date': self.release_date,
             'description': self.description,

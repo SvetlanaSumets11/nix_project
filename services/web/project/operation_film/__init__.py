@@ -14,13 +14,9 @@ def results(films: list, arg: str, route: str) -> dict:
     :param route: access link
     :return: JSON dict
     """
-    film_list = [{
-        'film_name': film.film_name,
-        'release_date': film.release_date,
-        'description': film.description,
-        'rating': film.rating,
-        'poster': film.poster
-    } for film in films]
+    film_list = []
+    for film in films:
+        film_list.append(film.to_dict())
 
     return jsonify(get_paginated_list(
         data=film_list,

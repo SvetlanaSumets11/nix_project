@@ -26,7 +26,6 @@ class Genre(db.Model):
         :return: genre
         """
         return {
-            'genre_id': self.genre_id,
             'genre_name': self.genre_name
         }
 

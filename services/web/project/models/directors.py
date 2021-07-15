@@ -29,7 +29,6 @@ class Director(db.Model):
         :return: director
         """
         return {
-            'director_id': self.director_id,
             'dir_first_name': self.dir_first_name,
             'dir_last_name': self.dir_last_name
         }

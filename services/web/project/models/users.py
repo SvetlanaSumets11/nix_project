@@ -68,10 +68,7 @@ class User(UserMixin, db.Model):
         :return: user
         """
         return {
-            'user_id': self.user_id,
             'user_login': self.user_login,
-            'user_password': self.user_password,
-            'is_admin': self.is_admin,
             'first_name': self.first_name,
             'last_name': self.last_name,
             'email': self.email
