@@ -1,6 +1,7 @@
 """
 User Database model.
 """
+import re
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 
@@ -33,12 +34,39 @@ class User(UserMixin, db.Model):
         :param last_name: users`s last name
         :param email: user`s mail for sending and receiving emails
         """
-        self.user_login = user_login
+        self.user_login = User.validate_login_name(user_login)
         self.user_password = generate_password_hash(user_password)
         self.is_admin = False
-        self.first_name = first_name
-        self.last_name = last_name
-        self.email = email
+        self.first_name = User.validate_login_name(first_name)
+        self.last_name = User.validate_login_name(last_name)
+        self.email = User.validate_email(email)
+
+    @classmethod
+    def validate_login_name(cls, user_arg: str) -> str:
+        """
+        Check validation of user_login
+        :param user_arg: users`s personal login name,
+        or users`s first name, or  users`s last name
+        :return: user_login
+        """
+        if not user_arg:
+            raise AssertionError("Argument is None")
+        if len(user_arg) < 5:
+            raise AssertionError("Length argument must be more then 5 characters")
+        return user_arg
+
+    @classmethod
+    def validate_email(cls, email: str) -> str:
+        """
+        Check validation of email
+        :param email: user`s mail for sending and receiving emails
+        :return: email
+        """
+        if not email:
+            raise AssertionError("Email is None")
+        if not re.match("[^@]+@[^@]+\.[^@]+", email):
+            raise AssertionError('Invalid email address')
+        return email
 
     def check_password(self, password) -> bool:
         """
