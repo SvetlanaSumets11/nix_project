@@ -33,7 +33,11 @@ class UserList(Resource):
         :return: json with information about the user
         """
         user_json = request.get_json()
-        user_data = user_schema.load(user_json, session=db.session)
+        try:
+            user_data = user_schema.load(user_json, session=db.session)
+        except AssertionError:
+            return {"status": 401, "message": "Invalid data"}
+
         user_data.save_to_db()
 
         return user_schema.dump(user_data), 201

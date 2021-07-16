@@ -8,13 +8,14 @@ from .resources.genres import GenreList, GenreListId
 from .resources.films import FilmList, FilmListId
 from .resources.users import UserList, UserListId
 
+from .resources.user_add_film import AddFilm
+
 from .pagination.pagination import PaginationFilm, PaginationGenre
 from .pagination.pagination import PaginationUser, PaginationDirector
 
 from .operation_film.find import Find
 from .operation_film.sorting import Sort
 from .operation_film.filter import YearFilter, GenreFilter, DirectorFilter
-from .operation_film.user_add_film import AddFilm
 
 from .auth.login import Login, Logout, SignUp
 

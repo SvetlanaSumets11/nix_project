@@ -64,7 +64,11 @@ def final_save(film_info: list, genre_obj_list: list, director_obj_list: list) -
     :param director_obj_list: list of objects of class Director
     :return: successful sms
     """
-    film = Film(*film_info)
+    try:
+        film = Film(*film_info)
+    except AssertionError:
+        return {"status": 401, "message": "Invalid data"}
+
     film.save_to_db()
 
     for genre in genre_obj_list:

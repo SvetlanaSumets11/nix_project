@@ -35,7 +35,11 @@ class FilmList(Resource):
         """
         if current_user.is_authenticated and current_user.is_admin:
             film_json = request.get_json()
-            film_data = film_schema.load(film_json, session=db.session)
+            try:
+                film_data = film_schema.load(film_json, session=db.session)
+            except AssertionError:
+                return {"status": 401, "message": "Invalid data"}
+
             film_data.save_to_db()
 
             return film_schema.dump(film_data), 201
