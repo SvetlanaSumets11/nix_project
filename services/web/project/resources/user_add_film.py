@@ -12,6 +12,22 @@ from ..models.genres import Genre
 from ..models.films import Film
 
 
+def check_recurring_movie(film_info: list) -> bool:
+    """
+    Function for checking if there is such a movie in the data base
+    :param film_info: information about the movie, that the user entered
+    :return: flag whether there is such a movie in the data base
+    """
+    films = Film.query.filter(Film.user_id == current_user.get_id())
+
+    for film in films:
+        film_in = [getattr(film, 'film_name'), str(getattr(film, 'release_date')),
+                   getattr(film, 'description'), getattr(film, 'rating'), getattr(film, 'poster')]
+        if film_in == film_info[1:]:
+            return True
+    return False
+
+
 def check_genre(genre_list: list):
     """
     The function checks for the presence in the database of each genre that
@@ -96,6 +112,9 @@ class AddFilm(Resource):
         film_info = [current_user.get_id(), data_json['film_name'], data_json['release_date'],
                      data_json['description'], data_json['rating'], data_json['poster']]
 
+        if check_recurring_movie(film_info):
+            return {"status": 404, 'message': "You already add this film"}
+
         genre_list = data_json['genre_name']
         director_list = list(zip(data_json['dir_first_name'], data_json['dir_last_name']))
 
@@ -103,7 +122,7 @@ class AddFilm(Resource):
         director = check_add_director(director_list)
 
         if current_user.is_authenticated:
-            if not isinstance(genre, dict):
-                return final_save(film_info, genre, director)
-            return genre
+            if isinstance(genre, dict):
+                return genre
+            return final_save(film_info, genre, director)
         return {"status": 401, "reason": "User is not authenticated"}

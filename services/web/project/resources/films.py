@@ -90,20 +90,20 @@ class FilmListId(Resource):
         film_data = Film.query.get_or_404(film_id)
         film_json = request.get_json()
 
-        if film_data:
-            if current_user.is_authenticated:
-                if current_user.is_admin or current_user.user_id == film_data.user_id:
+        if current_user.is_authenticated:
+            if current_user.is_admin or current_user.user_id == film_data.user_id:
+                try:
                     film_data.film_name = film_json['film_name']
                     film_data.release_date = film_json['release_date']
                     film_data.description = film_json['description']
-                    film_data.rating = film_json['rating']
+                    film_data.rating = Film.validate_rating(film_json['rating'])
                     film_data.poster = film_json['poster']
-                else:
-                    return {"status": 401, "reason": "User is not admin or film owner"}
+                except AssertionError:
+                    return {"status": 401, "message": "Invalid data"}
             else:
-                return {"status": 401, "reason": "User is not authenticated"}
+                return {"status": 401, "reason": "User is not admin or film owner"}
         else:
-            film_data = film_schema.load(film_json, session=db.session)
+            return {"status": 401, "reason": "User is not authenticated"}
 
         film_data.save_to_db()
         return film_schema.dump(film_data), 200

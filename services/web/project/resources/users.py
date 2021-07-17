@@ -7,6 +7,7 @@ from flask_login import login_required, current_user
 
 from ..modelschemas.users import UserSchema
 from ..models.users import User
+from . import already_exist
 from .. import db
 
 
@@ -33,6 +34,10 @@ class UserList(Resource):
         :return: json with information about the user
         """
         user_json = request.get_json()
+
+        if already_exist(User, user_json):
+            return {"status": 401, "reason": "User already exist"}
+
         try:
             user_data = user_schema.load(user_json, session=db.session)
         except AssertionError:
@@ -86,14 +91,17 @@ class UserListId(Resource):
             user_data = User.query.get_or_404(user_id)
             user_json = request.get_json()
 
-            if user_data:
-                user_data.user_login = user_json['user_login']
+            if already_exist(User, user_json):
+                return {"status": 401, "reason": "User already exist"}
+
+            try:
+                user_data.user_login = User.validate_login_name(user_json['user_login'])
                 user_data.user_password = user_json['user_password']
-                user_data.first_name = user_json['first_name']
-                user_data.last_name = user_json['last_name']
-                user_data.email = user_json['email']
-            else:
-                user_data = user_schema.load(user_json, session=db.session)
+                user_data.first_name = User.validate_login_name(user_json['first_name'])
+                user_data.last_name = User.validate_login_name(user_json['last_name'])
+                user_data.email = User.validate_email(user_json['email'])
+            except AssertionError:
+                return {"status": 401, "message": "Invalid data"}
 
             user_data.save_to_db()
             return user_schema.dump(user_data), 200

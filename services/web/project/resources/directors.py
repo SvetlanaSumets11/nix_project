@@ -7,6 +7,7 @@ from flask_login import login_required, current_user
 
 from ..modelschemas.directors import DirectorSchema
 from ..models.directors import Director
+from . import already_exist
 from .. import db
 
 DIRECTOR_NOT_FOUND = "Director not found."
@@ -34,6 +35,9 @@ class DirectorList(Resource):
         """
         if current_user.is_authenticated and current_user.is_admin:
             director_json = request.get_json()
+            if already_exist(Director, director_json):
+                return {"status": 401, "reason": "Director already exist"}
+
             director_data = director_schema.load(director_json, session=db.session)
             director_data.save_to_db()
 
@@ -84,12 +88,12 @@ class DirectorListId(Resource):
             director_data = Director.query.get_or_404(director_id)
             director_json = request.get_json()
 
-            if director_data:
-                director_data.dir_first_name = director_json['dir_first_name']
-                director_data.dir_last_name = director_json['dir_last_name']
-            else:
-                director_data = director_schema.load(director_json, session=db.session)
+            if already_exist(Director, director_json):
+                return {"status": 401, "reason": "Such a director already exist"}
 
+            director_data.dir_first_name = director_json['dir_first_name']
+            director_data.dir_last_name = director_json['dir_last_name']
             director_data.save_to_db()
+
             return director_schema.dump(director_data), 200
         return {"status": 401, "reason": "User is not admin"}

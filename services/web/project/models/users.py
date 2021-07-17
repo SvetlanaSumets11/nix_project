@@ -51,7 +51,7 @@ class User(UserMixin, db.Model):
         """
         if not user_arg:
             raise AssertionError("Argument is None")
-        if len(user_arg) < 5:
+        if len(user_arg) < 4:
             raise AssertionError("Length argument must be more then 5 characters")
         return user_arg
 

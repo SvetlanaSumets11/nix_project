@@ -12,52 +12,28 @@ from ..models.films import Film
 from ..models.users import User
 
 
-def director_json(directors: list) -> dict:
+def genre_director_json(genre_or_director: list) -> dict:
     """
-    Function for converting the data of the entity Director to JSON format
-    :param directors: list of Director entity objects
+    Function for converting the data of the entity Director or Genre to JSON format
+    :param genre_or_director: list of Director or Genre entity objects
     :return: JSON dict
     """
-    director_list = []
-    for director in directors:
-        director_list.append(director.to_dict())
-    if not director_list:
-        director_list = {'director': 'unknown'}
+    genre_director_list = []
+    for genre_director in genre_or_director:
+        genre_director_list.append(genre_director.to_dict())
+    if not genre_director_list:
+        genre_director_list = {'director': 'unknown'}
 
-    return director_list
+    return genre_director_list
 
 
-def genre_json(genres: list) -> dict:
+def film_user_json(obj) -> dict:
     """
-    Function for converting the data of the entity Genre to JSON format
-    :param genres: list of Genre entity objects
+    Function for converting the data of the entity User or Film to JSON format
+    :param obj: User entity or Film entity object
     :return: JSON dict
     """
-    genre_list = []
-    for genre in genres:
-        genre_list.append(genre.to_dict())
-    if not genre_list:
-        genre_list = {'genre': 'unknown'}
-
-    return genre_list
-
-
-def user_json(user: User):
-    """
-    Function for converting the data of the entity User to JSON format
-    :param user: User entity object
-    :return: JSON dict
-    """
-    return user.to_dict()
-
-
-def film_json(film: Film):
-    """
-    Function for converting the data of the entity Film to JSON format
-    :param film: Film entity object
-    :return:  JSON dict
-    """
-    return film.to_dict()
+    return obj.to_dict()
 
 
 def return_json(film_list, user_list, genre_list, director_list):
@@ -94,6 +70,6 @@ class Print(Resource):
             genres = Genre.query.join(FilmGenre).filter(FilmGenre.film_id == film_id).all()
             directors = Director.query.join(FilmDirector).filter(FilmDirector.film_id == film_id)
 
-            return return_json(film_json(film), user_json(user),
-                               genre_json(genres), director_json(directors))
+            return return_json(film_user_json(film), film_user_json(user),
+                               genre_director_json(genres), genre_director_json(directors))
         return {"status": 404, 'message': 'Film does not exist'}

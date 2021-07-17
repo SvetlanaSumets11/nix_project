@@ -7,6 +7,7 @@ from flask_login import login_required, current_user
 
 from ..modelschemas.genres import GenreSchema
 from ..models.genres import Genre
+from . import already_exist
 from .. import db
 
 GENRE_NOT_FOUND = "Genre not found."
@@ -34,6 +35,9 @@ class GenreList(Resource):
         """
         if current_user.is_authenticated and current_user.is_admin:
             genre_json = request.get_json()
+            if already_exist(Genre, genre_json):
+                return {"status": 401, "reason": "Genre already exist"}
+
             genre_data = genre_schema.load(genre_json, session=db.session)
             genre_data.save_to_db()
 
@@ -84,11 +88,11 @@ class GenreListId(Resource):
             genre_data = Genre.query.get_or_404(genre_id)
             genre_json = request.get_json()
 
-            if genre_data:
-                genre_data.genre_name = genre_json['genre_name']
-            else:
-                genre_data = genre_schema.load(genre_json, session=db.session)
+            if already_exist(Genre, genre_json):
+                return {"status": 401, "reason": "Genre already exist"}
 
+            genre_data.genre_name = genre_json['genre_name']
             genre_data.save_to_db()
+
             return genre_schema.dump(genre_data), 200
         return {"status": 401, "reason": "User is not admin"}

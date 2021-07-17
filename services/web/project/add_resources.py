@@ -59,5 +59,5 @@ api.add_resource(DirectorFilter, "/film/filter/director/<name_or_surname>")
 # operation with films(add) - post
 api.add_resource(AddFilm, "/film/add")
 
-# pretty print information about film (info about film, user, genre, director)
+# pretty print information about film (info about film, user, genre, director) - get
 api.add_resource(Print, "/film/info/<int:film_id>")
