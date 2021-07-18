@@ -1,6 +1,8 @@
 """
 Module for implementing the ability to add a movie by the user
 """
+import logging
+
 from flask_login import login_required, current_user
 from flask_restx import Resource
 from flask import request
@@ -10,6 +12,8 @@ from ..models.films_genres import FilmGenre
 from ..models.directors import Director
 from ..models.genres import Genre
 from ..models.films import Film
+
+from . import check_recurring_movie
 
 
 def check_genre(genre_list: list):
@@ -26,6 +30,7 @@ def check_genre(genre_list: list):
     for genre in genre_list:
         is_genre = Genre.query.filter(Genre.genre_name == genre).first()
         if not is_genre:
+            logging.info("Genre do not exist. Genre %s", genre)
             return {"status": 401, "reason": "Genre do not exist"}
         genre_obj_list.append(is_genre)
 
@@ -64,7 +69,12 @@ def final_save(film_info: list, genre_obj_list: list, director_obj_list: list) -
     :param director_obj_list: list of objects of class Director
     :return: successful sms
     """
-    film = Film(*film_info)
+    try:
+        film = Film(*film_info)
+    except AssertionError:
+        logging.info("Invalid data. Film %s", film_info[1])
+        return {"status": 401, "message": "Invalid data"}
+
     film.save_to_db()
 
     for genre in genre_obj_list:
@@ -75,6 +85,7 @@ def final_save(film_info: list, genre_obj_list: list, director_obj_list: list) -
         film_director = FilmDirector(film.film_id, director.director_id)
         film_director.save_to_db()
 
+    logging.info("Movie added successfully. Film %s", film_info[1])
     return {"status": 201, "message": "Movie added successfully"}
 
 
@@ -88,9 +99,7 @@ class AddFilm(Resource):
         :return: failed sms or successful sms
         """
         data_json = request.get_json()
-
-        film_info = [current_user.get_id(), data_json['film_name'], data_json['release_date'],
-                     data_json['description'], data_json['rating'], data_json['poster']]
+        is_exist, film_info = check_recurring_movie(data_json)
 
         genre_list = data_json['genre_name']
         director_list = list(zip(data_json['dir_first_name'], data_json['dir_last_name']))
@@ -99,7 +108,13 @@ class AddFilm(Resource):
         director = check_add_director(director_list)
 
         if current_user.is_authenticated:
-            if not isinstance(genre, dict):
-                return final_save(film_info, genre, director)
-            return genre
+            if is_exist:
+                logging.info(film_info)
+                return {"status": 404, 'message': "You already add this film"}
+
+            if isinstance(genre, dict):
+                return genre
+            return final_save(film_info, genre, director)
+
+        logging.info("User is not authenticated. User %s", current_user.user_login)
         return {"status": 401, "reason": "User is not authenticated"}

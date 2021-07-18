@@ -15,8 +15,8 @@ class Film(db.Model):
     film_name = db.Column(db.String(50), nullable=False)
     release_date = db.Column(db.Date)
     description = db.Column(db.Text)
-    rating = db.Column(db.Float)
-    poster = db.Column(db.String(100))
+    rating = db.Column(db.Float, nullable=False)
+    poster = db.Column(db.Text)
 
     film_directors = db.relationship('Director', secondary='film_director')
     film_genres = db.relationship("Genre", secondary='film_genre')
@@ -35,8 +35,21 @@ class Film(db.Model):
         self.film_name = film_name
         self.release_date = release_date
         self.description = description
-        self.rating = rating
+        self.rating = Film.validate_rating(rating)
         self.poster = poster
+
+    @classmethod
+    def validate_rating(cls, rating: float) -> float:
+        """
+        Check validation of rating
+        :param rating: average movie rating
+        :return: rating
+        """
+        if not rating:
+            raise AssertionError("Rating is None")
+        if rating > 10 or rating < 0:
+            raise AssertionError("Rating should be between 0 and 10")
+        return rating
 
     def to_dict(self) -> dict:
         """

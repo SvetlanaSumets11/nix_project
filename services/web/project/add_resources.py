@@ -8,13 +8,14 @@ from .resources.genres import GenreList, GenreListId
 from .resources.films import FilmList, FilmListId
 from .resources.users import UserList, UserListId
 
+from .resources.user_add_film import AddFilm
+
 from .pagination.pagination import PaginationFilm, PaginationGenre
 from .pagination.pagination import PaginationUser, PaginationDirector
 
 from .operation_film.find import Find
 from .operation_film.sorting import Sort
 from .operation_film.filter import YearFilter, GenreFilter, DirectorFilter
-from .operation_film.user_add_film import AddFilm
 
 from .auth.login import Login, Logout, SignUp
 
@@ -58,5 +59,5 @@ api.add_resource(DirectorFilter, "/film/filter/director/<name_or_surname>")
 # operation with films(add) - post
 api.add_resource(AddFilm, "/film/add")
 
-# pretty print information about film (info about film, user, genre, director)
+# pretty print information about film (info about film, user, genre, director) - get
 api.add_resource(Print, "/film/info/<int:film_id>")

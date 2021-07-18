@@ -1,6 +1,7 @@
 """
 User authorization module
 """
+import logging
 from flask import request, jsonify
 from flask_login import LoginManager, login_user, logout_user
 from flask_restx import Resource
@@ -9,7 +10,6 @@ from .. import app, db
 
 from ..models.users import User
 from ..resources.users import UserList
-
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -42,7 +42,9 @@ class Login(Resource):
 
         login_user(user)
         db.session.commit()
-        return jsonify({'result': 200, 'data': {'message': 'login success'}})
+
+        logging.info("Login success. User %s", user.user_login)
+        return jsonify({'status': 200, 'massage': 'login success'})
 
 
 class SignUp(Resource):
@@ -57,6 +59,7 @@ class SignUp(Resource):
         user = User.query.filter_by(user_login=user_json['user_login']).first()
 
         if user:
+            logging.info("User already exists. User %s", user.user_login)
             return jsonify({"status": 401, "reason": "User already exists"})
         return UserList.post()
 
@@ -70,4 +73,6 @@ class Logout(Resource):
         :return: successful message
         """
         logout_user()
-        return jsonify({'result': 200, 'data': {'message': 'logout success'}})
+
+        logging.info("Logout success")
+        return jsonify({'result': 200, 'message': 'logout success'})

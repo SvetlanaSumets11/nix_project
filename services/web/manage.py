@@ -3,7 +3,7 @@ Management file
 """
 from flask.cli import FlaskGroup
 from project import db, app
-
+from seed_db import seeder
 
 cli = FlaskGroup(app)
 
@@ -25,6 +25,14 @@ def drop_db() -> None:
     """
     db.drop_all()
     db.session.commit()
+
+
+@cli.command("seed_db")
+def seed_db() -> None:
+    """
+    Database seed function
+    """
+    seeder()
 
 
 if __name__ == "__main__":

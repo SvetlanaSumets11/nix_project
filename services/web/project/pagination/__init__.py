@@ -16,7 +16,7 @@ def return_json_pagination(data: list, route: str) -> dict:
         data=data,
         route=route,
         start=request.args.get('start', 1),
-        limit=request.args.get('limit', 10)), 200)
+        limit=request.args.get('limit', 5)), 200)
 
 
 def get_paginated_list(data: list, route: str, start: int, limit: int, arg: str = None) -> dict:
