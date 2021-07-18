@@ -65,23 +65,23 @@ def seed_director():
 def seed_film():
     db.session.add(Film(user_id=1, film_name="1944", release_date='2001-12-22',
                         description="Some description", rating=9.1, poster="http://some_link"))
-    db.session.add(Film(user_id=1, film_name="Father", release_date='1999-9-9',
+    db.session.add(Film(user_id=1, film_name="Father", release_date='1999-09-9',
                         description="Some description", rating=7.8, poster="http://some_link"))
-    db.session.add(Film(user_id=2, film_name="Family", release_date='2003-2-21',
+    db.session.add(Film(user_id=2, film_name="Family", release_date='2003-02-21',
                         description="Some description", rating=7.4, poster="http://some_link"))
-    db.session.add(Film(user_id=3, film_name="Friend", release_date='2005-3-11',
+    db.session.add(Film(user_id=3, film_name="Friend", release_date='2005-03-11',
                         description="Some description", rating=5.4, poster="http://some_link"))
     db.session.add(Film(user_id=4, film_name="Time", release_date='2004-11-16',
                         description="Some description", rating=1.2, poster="http://some_link"))
     db.session.add(Film(user_id=5, film_name="Boyfriend", release_date='2021-4-4',
                         description="Some description", rating=2.5, poster="http://some_link"))
-    db.session.add(Film(user_id=6, film_name="Girl", release_date='2007-7-1',
+    db.session.add(Film(user_id=6, film_name="Girl", release_date='2007-07-1',
                         description="Some description", rating=6.2, poster="http://some_link"))
-    db.session.add(Film(user_id=7, film_name="Boy", release_date='2020-8-10',
+    db.session.add(Film(user_id=7, film_name="Boy", release_date='2020-08-10',
                         description="Some description", rating=9.1, poster="http://some_link"))
-    db.session.add(Film(user_id=8, film_name="Mather", release_date='2020-1-12',
+    db.session.add(Film(user_id=8, film_name="Mather", release_date='2020-01-12',
                         description="Some description", rating=5.0, poster="http://some_link"))
-    db.session.add(Film(user_id=9, film_name="Love", release_date='2020-1-12',
+    db.session.add(Film(user_id=9, film_name="Love", release_date='2020-01-12',
                         description="Some description", rating=5.2, poster="http://some_link"))
     db.session.add(Film(user_id=10, film_name="Girlfriend", release_date='1997-10-11',
                         description="Some description", rating=8.7, poster="http://some_link"))

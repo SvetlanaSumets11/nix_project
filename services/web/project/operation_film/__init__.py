@@ -1,6 +1,8 @@
 """
 Module for output functions
 """
+import logging
+
 from flask import request, jsonify
 
 from ..pagination import get_paginated_list
@@ -36,4 +38,6 @@ def valid_return(films: list, arg: str, route: str) -> dict:
     """
     if films:
         return results(films, arg, route)
+
+    logging.info("Film was not found")
     return {"status": 401, "reason": "Films do not exist"}

@@ -1,6 +1,7 @@
 """
 Module for searching for a movie by partial match of the title
 """
+import logging
 from flask_restx import Resource
 
 from ..models.films import Film
@@ -14,7 +15,7 @@ def film_find(film_name: str) -> list:
     :return: all relevant objects of the class Film
     """
     search = '%' + film_name + '%'
-    return Film.query.filter(Film.film_name.like(search)).all()
+    return Film.query.filter(Film.film_name.ilike(search)).all()
 
 
 class Find(Resource):
@@ -27,4 +28,5 @@ class Find(Resource):
         :return: all relevant objects of the class Film in JSON format
         """
         films = film_find(name)
+        logging.info("All films with part %s are displayed", name)
         return valid_return(films, name, 'find/')

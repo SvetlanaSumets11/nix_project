@@ -1,6 +1,7 @@
 """
 Module for displaying complete information about the film
 """
+import logging
 from flask_restx import Resource
 from flask import jsonify
 
@@ -51,7 +52,7 @@ def return_json(film_list, user_list, genre_list, director_list):
     final_list['genre'] = genre_list
     final_list['director'] = director_list
 
-    return jsonify(final_list)
+    return jsonify(final_list, 200)
 
 
 class Print(Resource):
@@ -70,6 +71,9 @@ class Print(Resource):
             genres = Genre.query.join(FilmGenre).filter(FilmGenre.film_id == film_id).all()
             directors = Director.query.join(FilmDirector).filter(FilmDirector.film_id == film_id)
 
+            logging.info("Full details of the film have been returned. Movie with ID %d", film_id)
             return return_json(film_user_json(film), film_user_json(user),
                                genre_director_json(genres), genre_director_json(directors))
+
+        logging.info("Film with ID %d was not found", film_id)
         return {"status": 404, 'message': 'Film does not exist'}

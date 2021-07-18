@@ -1,8 +1,9 @@
 """
 Module for sorting films by rating and release date
 """
-from sqlalchemy import desc
+import logging
 
+from sqlalchemy import desc
 from flask_restx import Resource
 
 from ..models.films import Film
@@ -31,4 +32,5 @@ class Sort(Resource):
         :return: all relevant objects of the class Film in JSON format
         """
         films = film_sort(arg_sort)
+        logging.info("Sorted list of movies by %s", arg_sort)
         return valid_return(films, arg_sort, 'sort/')
