@@ -1946,8 +1946,7 @@
 2021-07-18 00:23:09,185:INFO:User added. User sveffta
 2021-07-18 00:23:09,198:INFO:172.18.0.1 - - [18/Jul/2021 00:23:09] "[37mPOST /users HTTP/1.1[0m" 201 -
 2021-07-18 00:23:11,499:INFO:User already exists. User sveffta
-2021-07-18 00:23:11,500:INFO:172.18.0.1 - - [18/Jul/2021 00:23:11] "[37mPOST /users HTTP/1.1[0m" 200 -
-2021-07-18 00:24:27,988:INFO: * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
-2021-07-18 00:24:27,988:INFO: * Restarting with stat
-2021-07-18 00:24:29,312:WARNING: * Debugger is active!
-2021-07-18 00:24:29,313:INFO: * Debugger PIN: 190-112-681
+2021-07-18 00:23:11,500:INFO:172.18.0.1 - - [18/Jul/2021 00:23:11] "[37mPOST /users HTTP/1.1[0m" 200 -2021-07-18 15:01:16,888:INFO: * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+2021-07-18 15:01:16,889:INFO: * Restarting with stat
+2021-07-18 15:01:18,216:WARNING: * Debugger is active!
+2021-07-18 15:01:18,350:INFO: * Debugger PIN: 216-443-715

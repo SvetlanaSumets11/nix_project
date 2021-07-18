@@ -3,54 +3,41 @@ version: '3.3'
 services:
   db:
     image: postgres:13-alpine
+    restart: always
     volumes:
-      - postgres_data_prod:/var/lib/postgresql/data/
+      - postgres_data:/var/lib/postgresql/data/
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
     container_name: db${APP_NAME}
     hostname: db${APP_NAME}
-    networks:
-      - flask-net
-
-  nginx:
-    build:
-      context: ./services/nginx
     ports:
-      - 1337:80
-    volumes:
-      - ./services/web/:/usr/src/app/web
-    env_file:
-      - ./.env
-    depends_on:
-      - web
-    container_name: nginx-${APP_NAME}
+      - 5432:5432
     networks:
       - flask-net
 
   web:
     build:
       context: ./services/web
-      dockerfile: Dockerfile
-    command: gunicorn --bind 0.0.0.0:5000 manage:app
+      dockerfile: Dockerfile.dev
+    command: python manage.py run -h 0.0.0.0
     volumes:
-      - ./services/web/:/usr/src/app/web
-    expose:
-      - 5000
+      - ./services/web/:/usr/src/app/
     env_file:
-      - ./.env
-      - ./.env.db
-    depends_on:
-      - db
+      - ./.env.dev
     container_name: ${APP_NAME}
     hostname: ${APP_NAME}
+    depends_on:
+      - db
+    ports:
+      - 5000:5000
     restart: always
     networks:
       - flask-net
 
 volumes:
-  postgres_data_prod:
+  postgres_data:
 
 networks:
   flask-net:
