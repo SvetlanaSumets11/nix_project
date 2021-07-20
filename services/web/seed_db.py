@@ -37,11 +37,15 @@ def seed_user():
 
 def seed_genre():
     db.session.add(Genre(genre_name="Psychology"))
+    db.session.add(Genre(genre_name="Detective"))
     db.session.add(Genre(genre_name="Romantic"))
     db.session.add(Genre(genre_name="Thriller"))
     db.session.add(Genre(genre_name="Tragedy"))
+    db.session.add(Genre(genre_name="Fantasy"))
+    db.session.add(Genre(genre_name="Cartoon"))
     db.session.add(Genre(genre_name="Comedy"))
     db.session.add(Genre(genre_name="Horror"))
+    db.session.add(Genre(genre_name="Crime"))
 
     db.session.commit()
 

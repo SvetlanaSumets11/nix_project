@@ -11,8 +11,8 @@ class FilmGenre(db.Model):
     """
     __tablename__ = 'film_genre'
     film_genre_id = db.Column(db.Integer, primary_key=True)
-    film_id = db.Column(db.Integer, db.ForeignKey("film.film_id"), nullable=False, )
-    genre_id = db.Column(db.Integer, db.ForeignKey("genre.genre_id"), nullable=False)
+    film_id = db.Column(db.Integer, db.ForeignKey("film.film_id", ondelete='SET NULL'))
+    genre_id = db.Column(db.Integer, db.ForeignKey("genre.genre_id", ondelete='SET NULL'))
 
     def __init__(self, film_id, genre_id):
         """

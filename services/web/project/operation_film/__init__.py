@@ -40,4 +40,4 @@ def valid_return(films: list, arg: str, route: str) -> dict:
         return results(films, arg, route)
 
     logging.info("Film was not found")
-    return {"status": 401, "reason": "Films do not exist"}
+    return {"status": 404, "reason": "Films do not exist"}
