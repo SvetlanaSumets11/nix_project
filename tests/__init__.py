@@ -32,7 +32,7 @@ DIRECTOR_PART_EXIST = ["sVETLA", "DanS", "kaya", "KA", "ANN", "lons", "ORT", "gn
 DIRECTOR_PART_NOT_EXIST = ["ART", "oza", "StEp", "enKo", "irko", "OZ", "em", "AR", "Kirko", "PCH"]
 
 YEAR_START = [2001, 2002, 2003, 2004, 2006, 2007, 2014, 2016, 2018, 2020]
-YEAR_FINISH = [2007, 2020, 2014, 2016, 2022, 2018, 2021, 2010, 2021, 2021]
+YEAR_FINISH = [2007, 2020, 2014, 2016, 2022, 2018, 2021, 2020, 2021, 2021]
 
 GENRE_1 = {"genre_name": "Psychology"}
 DIRECTOR_1 = {"dir_first_name": "Divnaya", "dir_last_name": "Svetlana"}
