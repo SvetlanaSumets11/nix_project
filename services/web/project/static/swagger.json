@@ -1,0 +1,602 @@
+{
+    "swagger": "2.0",
+    "basePath": "/",
+    "paths": {
+        "/director": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "summary": "Function for pagination of directors, start displaying posts",
+                "description": "from the first, total on a page of 10 posts\n:return: JSON",
+                "operationId": "get_pagination_director",
+                "tags": [
+                    "default"
+                ]
+            }
+        },
+        "/directors": {
+            "post": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "summary": "Post method",
+                "description": ":return: json with information about the directors",
+                "operationId": "post_director_list",
+                "tags": [
+                    "default"
+                ]
+            },
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "summary": "Get method",
+                "description": ":return: error message or json with information about the directors",
+                "operationId": "get_director_list",
+                "tags": [
+                    "default"
+                ]
+            }
+        },
+        "/directors/{director_id}": {
+            "parameters": [
+                {
+                    "name": "director_id",
+                    "in": "path",
+                    "required": true,
+                    "type": "integer"
+                }
+            ],
+            "delete": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "summary": "Delete method",
+                "description": ":param director_id: director`s id\n:return: error message or successful message",
+                "operationId": "delete_director_list_id",
+                "tags": [
+                    "default"
+                ]
+            },
+            "put": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "summary": "Put method",
+                "description": ":param director_id: director`s id\n:return: json with information about the directors",
+                "operationId": "put_director_list_id",
+                "tags": [
+                    "default"
+                ]
+            },
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "summary": "Get method",
+                "description": ":param director_id: director`s id\n:return: error message or json with information about the directors",
+                "operationId": "get_director_list_id",
+                "tags": [
+                    "default"
+                ]
+            }
+        },
+        "/film": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "summary": "Function for pagination of films, start displaying posts",
+                "description": "from the first, total on a page of 10 posts\n:return: JSON",
+                "operationId": "get_pagination_film",
+                "tags": [
+                    "default"
+                ]
+            }
+        },
+        "/film/add": {
+            "post": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "summary": "Post method",
+                "description": ":return: failed sms or successful sms",
+                "operationId": "post_add_film",
+                "tags": [
+                    "default"
+                ]
+            }
+        },
+        "/film/filter/director/{name_or_surname}": {
+            "parameters": [
+                {
+                    "name": "name_or_surname",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "summary": "Get method",
+                "description": ":param name_or_surname: any part of the director`s first name or director`s last name\n:return: all relevant objects of the class Film in JSON format",
+                "operationId": "get_director_filter",
+                "tags": [
+                    "default"
+                ]
+            }
+        },
+        "/film/filter/genre/{genre_name}": {
+            "parameters": [
+                {
+                    "name": "genre_name",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "summary": "Get method",
+                "description": ":param genre_name: any part of the genre`s name\n:return: all relevant objects of the class Film in JSON format",
+                "operationId": "get_genre_filter",
+                "tags": [
+                    "default"
+                ]
+            }
+        },
+        "/film/filter/year/{starting}/{finishing}": {
+            "parameters": [
+                {
+                    "name": "starting",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                },
+                {
+                    "name": "finishing",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "summary": "Get method",
+                "description": ":param starting: year at the beginning of the range for filtering\n:param finishing: year at the end of the range for filtering\n:return: all relevant objects of the class Film in JSON format",
+                "operationId": "get_year_filter",
+                "tags": [
+                    "default"
+                ]
+            }
+        },
+        "/film/find/{name}": {
+            "parameters": [
+                {
+                    "name": "name",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "summary": "Get method",
+                "description": ":param name: any part of the movie name to search\n:return: all relevant objects of the class Film in JSON format",
+                "operationId": "get_find",
+                "tags": [
+                    "default"
+                ]
+            }
+        },
+        "/film/info/{film_id}": {
+            "parameters": [
+                {
+                    "name": "film_id",
+                    "in": "path",
+                    "required": true,
+                    "type": "integer"
+                }
+            ],
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "summary": "Get method",
+                "description": ":param film_id: film`s id\n:return: Full information about the movie: data about the movie,\nthe user who added it, genres and directors",
+                "operationId": "get_print",
+                "tags": [
+                    "default"
+                ]
+            }
+        },
+        "/film/sort/{arg_sort}": {
+            "parameters": [
+                {
+                    "name": "arg_sort",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "summary": "Get method",
+                "description": ":param arg_sort: sort argument - rating or date\n:return: all relevant objects of the class Film in JSON format",
+                "operationId": "get_sort",
+                "tags": [
+                    "default"
+                ]
+            }
+        },
+        "/films": {
+            "post": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "summary": "Post method",
+                "description": ":return: json with information about the film",
+                "operationId": "post_film_list",
+                "tags": [
+                    "default"
+                ]
+            },
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "summary": "Get method",
+                "description": ":return: error message or json with information about the film",
+                "operationId": "get_film_list",
+                "tags": [
+                    "default"
+                ]
+            }
+        },
+        "/films/{film_id}": {
+            "parameters": [
+                {
+                    "name": "film_id",
+                    "in": "path",
+                    "required": true,
+                    "type": "integer"
+                }
+            ],
+            "delete": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "summary": "Delete method",
+                "description": ":param film_id: film`s id\n:return: error message or successful message",
+                "operationId": "delete_film_list_id",
+                "tags": [
+                    "default"
+                ]
+            },
+            "put": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "summary": "Put method",
+                "description": ":param film_id: film`s id\n:return: json with information about the film",
+                "operationId": "put_film_list_id",
+                "tags": [
+                    "default"
+                ]
+            },
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "summary": "Get method",
+                "description": ":param film_id: film`s id\n:return: error message or json with information about the film",
+                "operationId": "get_film_list_id",
+                "tags": [
+                    "default"
+                ]
+            }
+        },
+        "/genre": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "summary": "Function for pagination of genres, start displaying posts",
+                "description": "from the first, total on a page of 10 posts\n:return: JSON",
+                "operationId": "get_pagination_genre",
+                "tags": [
+                    "default"
+                ]
+            }
+        },
+        "/genres": {
+            "post": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "summary": "Post method",
+                "description": ":return: json with information about the genre",
+                "operationId": "post_genre_list",
+                "tags": [
+                    "default"
+                ]
+            },
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "summary": "Get method",
+                "description": ":return: error message or json with information about the genre",
+                "operationId": "get_genre_list",
+                "tags": [
+                    "default"
+                ]
+            }
+        },
+        "/genres/{genre_id}": {
+            "parameters": [
+                {
+                    "name": "genre_id",
+                    "in": "path",
+                    "required": true,
+                    "type": "integer"
+                }
+            ],
+            "delete": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "summary": "Delete method",
+                "description": ":param genre_id: genre`s id\n:return: error message or successful message",
+                "operationId": "delete_genre_list_id",
+                "tags": [
+                    "default"
+                ]
+            },
+            "put": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "summary": "Put method",
+                "description": ":param genre_id: genre`s id\n:return: json with information about the genre",
+                "operationId": "put_genre_list_id",
+                "tags": [
+                    "default"
+                ]
+            },
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "summary": "Get method",
+                "description": ":param genre_id: genre`s id\n:return: error message or json with information about the genre",
+                "operationId": "get_genre_list_id",
+                "tags": [
+                    "default"
+                ]
+            }
+        },
+        "/user": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "summary": "Function for pagination of users, start displaying posts",
+                "description": "from the first, total on a page of 10 posts\n:return: JSON",
+                "operationId": "get_pagination_user",
+                "tags": [
+                    "default"
+                ]
+            }
+        },
+        "/user/login": {
+            "post": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "summary": "Function for user login",
+                "description": ":return: error message or successful message",
+                "operationId": "post_login",
+                "tags": [
+                    "default"
+                ]
+            }
+        },
+        "/user/logout": {
+            "post": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "summary": "Function for user logout",
+                "description": ":return: successful message",
+                "operationId": "post_logout",
+                "tags": [
+                    "default"
+                ]
+            }
+        },
+        "/user/signup": {
+            "post": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "summary": "Function for creating a user in the system",
+                "description": ":return: error message or json with information about the user",
+                "operationId": "post_sign_up",
+                "tags": [
+                    "default"
+                ]
+            }
+        },
+        "/users": {
+            "post": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "summary": "Post method",
+                "description": ":return: json with information about the user",
+                "operationId": "post_user_list",
+                "tags": [
+                    "default"
+                ]
+            },
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "summary": "Get method",
+                "description": ":return: error message or json with information about the user",
+                "operationId": "get_user_list",
+                "tags": [
+                    "default"
+                ]
+            }
+        },
+        "/users/{user_id}": {
+            "parameters": [
+                {
+                    "name": "user_id",
+                    "in": "path",
+                    "required": true,
+                    "type": "integer"
+                }
+            ],
+            "delete": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "summary": "Delete method",
+                "description": ":param user_id: user`s id\n:return: error message or successful message",
+                "operationId": "delete_user_list_id",
+                "tags": [
+                    "default"
+                ]
+            },
+            "put": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "summary": "Put method",
+                "description": ":param user_id: user`s id\n:return: json with information about the user",
+                "operationId": "put_user_list_id",
+                "tags": [
+                    "default"
+                ]
+            },
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "summary": "Get method",
+                "description": ":param user_id: user`s id\n:return: error message or json with information about the user",
+                "operationId": "get_user_list_id",
+                "tags": [
+                    "default"
+                ]
+            }
+        }
+    },
+    "info": {
+        "title": "Film library",
+        "version": "1.0"
+    },
+    "produces": [
+        "application/json"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "tags": [
+        {
+            "name": "default",
+            "description": "Default namespace"
+        }
+    ],
+    "responses": {
+        "ParseError": {
+            "description": "When a mask can't be parsed"
+        },
+        "MaskError": {
+            "description": "When any error occurs on mask"
+        }
+    }
+}
